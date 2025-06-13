@@ -5,9 +5,18 @@ from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
 from selenium.webdriver.common.by import By
 import time
+import csv
+import os
 
 class ImdbSpiderSpider(scrapy.Spider):
     name = "imdb_spider"
+
+    def __init__(self):
+        file_exists = os.path.isfile('imdb_top_250_movies.csv')
+        self.csv_file = open('imdb_top_250_movies.csv', 'a', newline='', encoding='utf-8')
+        self.csv_writer = csv.writer(self.csv_file)
+        if not file_exists:
+            self.csv_writer.writerow(['name', 'rating', 'genre', 'release_year', 'movie_runtime', 'imdb_link'])
 
     def start_requests(self):
         options = Options()
@@ -44,12 +53,25 @@ class ImdbSpiderSpider(scrapy.Spider):
         movie_runtime = response.xpath('(//ul[@class="ipc-inline-list ipc-inline-list--show-dividers sc-d3b78e42-2 etAqcO baseAlt baseAlt"]/li)[3]/text()').get()
 
         # yielding the extracted data
-        yield {
+        movie_details = {
             'name': name if name else 'N/A',
             'rating': rating if rating else 'N/A',
-            'genre': ' / '.join(genres[3:6]) if genres else 'N/A',
+            'genre': ' / '.join(genres) if genres else 'N/A',
             'release_year': release_year if release_year else 'N/A',
             'movie_runtime': movie_runtime if movie_runtime else 'N/A',
             'imdb_link': response.url
         }
+        print(movie_details)
 
+        self.csv_writer.writerow([
+            movie_details['name'],
+            movie_details['rating'],
+            movie_details['genre'],
+            movie_details['release_year'],
+            movie_details['movie_runtime'],
+            movie_details['imdb_link']
+        ])
+
+
+    def closed(self, reason):
+        self.csv_file.close()
