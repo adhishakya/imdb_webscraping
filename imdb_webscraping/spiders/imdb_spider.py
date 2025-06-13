@@ -39,7 +39,6 @@ class ImdbSpiderSpider(scrapy.Spider):
         # extracting movie details
         name = response.css('span.hero__primary-text::text').get()
         rating = response.css('span.sc-d541859f-1::text').get()
-        release_year = response.css('a.ipc-link::text').get()
         genres = response.xpath('//div[contains(@class, "ipc-chip-list__scroller")]//span[@class="ipc-chip__text"]/text()').getall()
         release_year = response.xpath('(//ul[@class="ipc-inline-list ipc-inline-list--show-dividers sc-d3b78e42-2 etAqcO baseAlt baseAlt"]/li)[1]/a/text()').get()
         movie_runtime = response.xpath('(//ul[@class="ipc-inline-list ipc-inline-list--show-dividers sc-d3b78e42-2 etAqcO baseAlt baseAlt"]/li)[3]/text()').get()
@@ -48,7 +47,6 @@ class ImdbSpiderSpider(scrapy.Spider):
         yield {
             'name': name if name else 'N/A',
             'rating': rating if rating else 'N/A',
-            'release_year': release_year if release_year else 'N/A',
             'genre': ' / '.join(genres[3:6]) if genres else 'N/A',
             'release_year': release_year if release_year else 'N/A',
             'movie_runtime': movie_runtime if movie_runtime else 'N/A',
