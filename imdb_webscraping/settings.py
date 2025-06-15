@@ -108,3 +108,27 @@ DOWNLOADER_MIDDLEWARES = {
     # 'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
     # 'rotating_proxies.middlewares.BanDetectionMiddleware': 620,
 }
+
+# CSV output
+FEEDS = {
+    'imdb_top_250_movies.csv' : {
+        'format' : 'csv',
+        'overwrite' : False,
+        'encoding' : 'utf-8',
+    }
+}
+
+# Order of the columns
+FEED_EXPORT_FIELDS = [
+    'name',
+    'rating',
+    'genres',
+    'release_year',
+    'movie_runtime',
+    'imdb_link'
+]
+
+# Custom csv exporter
+FEED_EXPORTERS = {
+    'csv' : 'imdb_webscraping.utils.csv_exporter.CustomCsvItemExporter',
+}
