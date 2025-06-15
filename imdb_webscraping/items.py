@@ -7,6 +7,9 @@ import scrapy
 
 
 class ImdbWebscrapingItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    name = scrapy.Field()
+    rating = scrapy.Field()
+    genres = scrapy.Field()
+    release_year = scrapy.Field()
+    movie_runtime = scrapy.Field()
+    imdb_link = scrapy.Field()
